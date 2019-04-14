@@ -94,12 +94,16 @@ function verificarCartoesSelecionados(){
     incrementarContadorDeMovimentos();
     habilitarCartoesNaoSelecionados();
 
-    atualizarPlacar();
+    atualizarPlacar()
 }
 
 function atualizarPlacar(){
     if(cartoesNaoCombinados.length === 0){
         exibirModalResultado();
+    }
+
+    if(contadorDeMovimentos > 0){
+        
     }
 }
 
@@ -177,17 +181,13 @@ function fecharCartoesSelecionados(){
         segundoCartaoSelecionado.removeClass('match');
         primeiroCartaoSelecionado.removeClass('match');
     }
-    primeiroCartaoSelecionado.toggleClass('open')
-    primeiroCartaoSelecionado = undefined;
-    segundoCartaoSelecionado.toggleClass('open')
-    segundoCartaoSelecionado = undefined;
+    esquecerCartoesSelecionados();
 }
 
 function reiniciarCartoes(){
     cartoes = $('.card');
 
-    primeiroCartaoSelecionado = undefined;
-    segundoCartaoSelecionado = undefined;
+    esquecerCartoesSelecionados();
 
     for(cartao of cartoes){
         $(cartao).removeClass('match open')
@@ -201,4 +201,11 @@ function exibirModalResultado(){
         close: reiniciarCartoes
     });
     $('.close-modal').on('click', reiniciarCartoes);
+}
+
+function esquecerCartoesSelecionados(){
+    primeiroCartaoSelecionado.removeClass('open')
+    primeiroCartaoSelecionado = undefined;
+    segundoCartaoSelecionado.removeClass('open')
+    segundoCartaoSelecionado = undefined;
 }
