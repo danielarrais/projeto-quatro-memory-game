@@ -67,7 +67,6 @@ function revelarCartao(event){
         }else if(segundoCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
             segundoCartaoSelecionado = cartaoClicado;
         }
-        cartaoClicado.toggleClass('open')
         cartaoClicado.toggleClass('match');
 
         if(temDoisCartoesSelecionados()){
@@ -149,6 +148,8 @@ function atualizarListasDeCartoes(){
 function fecharCartoesAbertos(){
     segundoCartaoSelecionado.toggleClass('match');
     primeiroCartaoSelecionado.toggleClass('match');
+    segundoCartaoSelecionado.toggleClass('open')
+    primeiroCartaoSelecionado.toggleClass('open')
     if(!compararCartoesSelecionados()){
         primeiroCartaoSelecionado = undefined;
         segundoCartaoSelecionado = undefined;
