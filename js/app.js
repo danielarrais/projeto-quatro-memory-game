@@ -1,14 +1,15 @@
 /*
  * Create a list that holds all of your cards
  */
+const cards = $('.card');
+const spanContadorDeMovimentos = $('.moves')
 
+let contadorMovimentos = 0;
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+let primeiroCartaoSelecionado;
+let segndoCartaoSelecionado;
+
+prepararCards(cards);
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -25,44 +26,82 @@ function shuffle(array) {
     return array;
 }
 
+function prepararJogo(){
+    contadorMovimentos = 0;
+    embaralharJogo(cards);
+}
 
 /*
  * Embaralha os cards passados
  *   - limpa o deck de cartas, embaralha as passadas e lança o novo arranjo
  *   - adiciona o evento click com a função de revelar o card a todos eles
  */
-function prepararCards(cards){
+function embaralharJogo(cards){
     let deck = $('.deck')
 
     shuffle(cards);
 
-    deck.on('click', 'li', showCard)
-
     deck.empty();
 
     deck.append(cards)
+
+    for(card of cards){
+        $(card).on('click', revelarCartao)
+    }
 }
 
 /*
  * Revela a figura clicada
  *   - adiciona ou remove a class 'match' do elemento clicado
  */
-function showCard(event){
-    $(event.target).toggleClass('match');
+function revelarCartao(event){
+    if(primeiroCartaoSelecionado === undefined || segndoCartaoSelecionado === undefined){
+        cartaoClicado = $(event.target);
+        if(primeiroCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
+            primeiroCartaoSelecionado = cartaoClicado;
+        }else if(segndoCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
+            segndoCartaoSelecionado = cartaoClicado;
+        }
+
+        cartaoClicado.toggleClass('match');
+        
+        setTimeout(verificarCartoesSelecionados,1000);
+    }
+}
+
+function verificarCartoesSelecionados(){
+    if(primeiroCartaoSelecionado !== undefined && segndoCartaoSelecionado !== undefined){
+        if(compararCartoesSelecionados()){
+            primeiroCartaoSelecionado.unbind('click', revelarCartao);
+            segndoCartaoSelecionado.unbind('click', revelarCartao);
+        }else{
+            segndoCartaoSelecionado.toggleClass('match');
+            primeiroCartaoSelecionado.toggleClass('match');
+        }
+        primeiroCartaoSelecionado = undefined;
+        segndoCartaoSelecionado = undefined;
+        incrementarMovimentos();
+    }
 }
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+ * Compara os dois card selecionados
+*/
+function compararCartoesSelecionados(){
+    if(primeiroCartaoSelecionado.attr('id') === segndoCartaoSelecionado.attr('id')){
+        return true;
+    }
 
-const cards = $('.card');
+    return false;
+}
 
-prepararCards(cards);
+/*
+ * Incrementa contagem de movimentos
+*/
+function incrementarMovimentos(){
+    if(spanContadorDeMovimentos !== undefined){
+        const count = spanContadorDeMovimentos.text();
+        spanContadorDeMovimentos.text(count + 1);
+    }
+}
 
