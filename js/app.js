@@ -5,14 +5,15 @@ let cartoesNaoCombinados;
 
 let cartoesCombinados;
 
-const spanContadorDeMovimentos = $('.moves')
+const contadorDeMovimentosSpan = $('.moves')
+const restartButton = $('.restart')
 
-let contadorDeMovimentos = 0;
+let contadorDeMovimentos;
 
 let primeiroCartaoSelecionado;
 let segundoCartaoSelecionado;
 
-prepararJogo();
+iniciarJogo();
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -29,10 +30,12 @@ function shuffle(array) {
     return array;
 }
 
-function prepararJogo(){
-    contadorDeMovimentos = 0;
-    atualizarListasDeCartoes();
+function iniciarJogo(){
+    reiniciarCartoes();
+    iniciarContadorDeMovimentos();
     embaralharJogo();
+
+    restartButton.on('click', iniciarJogo)
 }
 
 /*
@@ -61,12 +64,17 @@ function embaralharJogo(){
 function revelarCartao(event){
     if(!temDoisCartoesSelecionados()){
         cartaoClicado = $(event.target);
-        cartaoClicado.toggleClass('open')
+
+        if(!cartaoClicado.hasClass('open')){
+            cartaoClicado.toggleClass('open')
+        }
+        
         if(primeiroCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
             primeiroCartaoSelecionado = cartaoClicado;
         }else if(segundoCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
             segundoCartaoSelecionado = cartaoClicado;
         }
+        
         cartaoClicado.toggleClass('match');
 
         if(temDoisCartoesSelecionados()){
@@ -81,7 +89,7 @@ function verificarCartoesSelecionados(){
     if(compararCartoesSelecionados()){
         atualizarListasDeCartoes();
     }
-    fecharCartoesAbertos()
+    fecharCartoesSelecionados()
     incrementarContadorDeMovimentos();
     habilitarCartoesNaoSelecionados();
 }
@@ -101,10 +109,18 @@ function compararCartoesSelecionados(){
  * Incrementa contagem de movimentos
 */
 function incrementarContadorDeMovimentos(){
-    if(spanContadorDeMovimentos !== undefined){
+    if(contadorDeMovimentosSpan !== undefined){
         contadorDeMovimentos++;
-        spanContadorDeMovimentos.text(contadorDeMovimentos);
+        contadorDeMovimentosSpan.text(contadorDeMovimentos);
     }
+}
+
+/*
+ * Incrementa contagem de movimentos
+*/
+function iniciarContadorDeMovimentos(){
+    contadorDeMovimentos = 0;
+    contadorDeMovimentosSpan.text(contadorDeMovimentos);
 }
 
 /**
@@ -128,8 +144,10 @@ function habilitarCartoesNaoSelecionados(){
         cartao.toggleClass('disabled');
     }
 
-    for(cartao of cartoesCombinados){
-        $(cartao).unbind('click', revelarCartao);
+    if(cartoesCombinados !== undefined){
+        for(cartao of cartoesCombinados){
+            $(cartao).unbind('click', revelarCartao);
+        }
     }
 }
 
@@ -145,13 +163,26 @@ function atualizarListasDeCartoes(){
     cartoesCombinados = $('.card.match')
 }
 
-function fecharCartoesAbertos(){
-    segundoCartaoSelecionado.toggleClass('match');
-    primeiroCartaoSelecionado.toggleClass('match');
-    segundoCartaoSelecionado.toggleClass('open')
-    primeiroCartaoSelecionado.toggleClass('open')
+function fecharCartoesSelecionados(){
     if(!compararCartoesSelecionados()){
-        primeiroCartaoSelecionado = undefined;
-        segundoCartaoSelecionado = undefined;
+        segundoCartaoSelecionado.removeClass('match');
+        primeiroCartaoSelecionado.removeClass('match');
     }
+    primeiroCartaoSelecionado.toggleClass('open')
+    primeiroCartaoSelecionado = undefined;
+    segundoCartaoSelecionado.toggleClass('open')
+    segundoCartaoSelecionado = undefined;
+}
+
+function reiniciarCartoes(){
+    cartoes = $('.card');
+
+    primeiroCartaoSelecionado = undefined;
+    segundoCartaoSelecionado = undefined;
+
+    for(cartao of cartoes){
+        $(cartao).removeClass('match open')
+    }
+
+    cartoesNaoCombinados = cartoes;
 }
