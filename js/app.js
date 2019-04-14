@@ -1,15 +1,18 @@
 /*
- * Create a list that holds all of your cards
+ * Create a list that holds all of your cartoes
  */
-const cards = $('.card');
+let cartoesNaoCombinados;
+
+let cartoesCombinados;
+
 const spanContadorDeMovimentos = $('.moves')
 
-let contadorMovimentos = 0;
+let contadorDeMovimentos = 0;
 
 let primeiroCartaoSelecionado;
-let segndoCartaoSelecionado;
+let segundoCartaoSelecionado;
 
-prepararCards(cards);
+prepararJogo();
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -27,26 +30,27 @@ function shuffle(array) {
 }
 
 function prepararJogo(){
-    contadorMovimentos = 0;
-    embaralharJogo(cards);
+    contadorDeMovimentos = 0;
+    atualizarListasDeCartoes();
+    embaralharJogo();
 }
 
 /*
- * Embaralha os cards passados
+ * Embaralha os cartoes passados
  *   - limpa o deck de cartas, embaralha as passadas e lança o novo arranjo
- *   - adiciona o evento click com a função de revelar o card a todos eles
+ *   - adiciona o evento click com a função de revelar o cartao a todos eles
  */
-function embaralharJogo(cards){
+function embaralharJogo(){
     let deck = $('.deck')
 
-    shuffle(cards);
+    shuffle(cartoesNaoCombinados);
 
     deck.empty();
 
-    deck.append(cards)
+    deck.append(cartoesNaoCombinados)
 
-    for(card of cards){
-        $(card).on('click', revelarCartao)
+    for(cartao of cartoesNaoCombinados){
+        $(cartao).on('click', revelarCartao)
     }
 }
 
@@ -55,40 +59,39 @@ function embaralharJogo(cards){
  *   - adiciona ou remove a class 'match' do elemento clicado
  */
 function revelarCartao(event){
-    if(primeiroCartaoSelecionado === undefined || segndoCartaoSelecionado === undefined){
+    if(!temDoisCartoesSelecionados()){
         cartaoClicado = $(event.target);
+        cartaoClicado.toggleClass('open')
         if(primeiroCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
             primeiroCartaoSelecionado = cartaoClicado;
-        }else if(segndoCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
-            segndoCartaoSelecionado = cartaoClicado;
+        }else if(segundoCartaoSelecionado === undefined && !cartaoClicado.hasClass('match')){
+            segundoCartaoSelecionado = cartaoClicado;
         }
-
+        cartaoClicado.toggleClass('open')
         cartaoClicado.toggleClass('match');
+
+        if(temDoisCartoesSelecionados()){
+            desabilitarClickDosCartoes();
+            setTimeout(verificarCartoesSelecionados, 1500);
+        }
         
-        setTimeout(verificarCartoesSelecionados,1000);
     }
 }
 
 function verificarCartoesSelecionados(){
-    if(primeiroCartaoSelecionado !== undefined && segndoCartaoSelecionado !== undefined){
-        if(compararCartoesSelecionados()){
-            primeiroCartaoSelecionado.unbind('click', revelarCartao);
-            segndoCartaoSelecionado.unbind('click', revelarCartao);
-        }else{
-            segndoCartaoSelecionado.toggleClass('match');
-            primeiroCartaoSelecionado.toggleClass('match');
-        }
-        primeiroCartaoSelecionado = undefined;
-        segndoCartaoSelecionado = undefined;
-        incrementarMovimentos();
+    if(compararCartoesSelecionados()){
+        atualizarListasDeCartoes();
     }
+    fecharCartoesAbertos()
+    incrementarContadorDeMovimentos();
+    habilitarCartoesNaoSelecionados();
 }
 
 /*
- * Compara os dois card selecionados
+ * Compara os dois cartao selecionados
 */
 function compararCartoesSelecionados(){
-    if(primeiroCartaoSelecionado.attr('id') === segndoCartaoSelecionado.attr('id')){
+    if(primeiroCartaoSelecionado.attr('id') === segundoCartaoSelecionado.attr('id')){
         return true;
     }
 
@@ -98,10 +101,56 @@ function compararCartoesSelecionados(){
 /*
  * Incrementa contagem de movimentos
 */
-function incrementarMovimentos(){
+function incrementarContadorDeMovimentos(){
     if(spanContadorDeMovimentos !== undefined){
-        const count = spanContadorDeMovimentos.text();
-        spanContadorDeMovimentos.text(count + 1);
+        contadorDeMovimentos++;
+        spanContadorDeMovimentos.text(contadorDeMovimentos);
     }
 }
 
+/**
+ * Desabilita a função click de todos os cartoes
+ */
+function desabilitarClickDosCartoes(){
+    for(cartao of cartoesNaoCombinados){
+        cartao = $(cartao);
+        cartao.unbind('click', revelarCartao);
+        cartao.toggleClass('disabled');
+    }
+}
+
+/**
+ * Habilita a função click de todos os cartoes não selecionados
+ */
+function habilitarCartoesNaoSelecionados(){
+    for(cartao of cartoesNaoCombinados){
+        cartao = $(cartao);
+        cartao.on('click', revelarCartao);
+        cartao.toggleClass('disabled');
+    }
+
+    for(cartao of cartoesCombinados){
+        $(cartao).unbind('click', revelarCartao);
+    }
+}
+
+function temDoisCartoesSelecionados(){
+    if(primeiroCartaoSelecionado !== undefined && segundoCartaoSelecionado !== undefined){
+        return true;
+    }
+    return false;
+}
+
+function atualizarListasDeCartoes(){
+    cartoesNaoCombinados = $('.card').not('.match')
+    cartoesCombinados = $('.card.match')
+}
+
+function fecharCartoesAbertos(){
+    if(!compararCartoesSelecionados()){
+        primeiroCartaoSelecionado = undefined;
+        segundoCartaoSelecionado = undefined;
+    }
+    segundoCartaoSelecionado.toggleClass('match');
+    primeiroCartaoSelecionado.toggleClass('match');
+}
