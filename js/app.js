@@ -5,8 +5,9 @@ let cartoesNaoCombinados;
 
 let cartoesCombinados;
 
-const contadorDeMovimentosSpan = $('.moves')
-const restartButton = $('.restart')
+const contadorDeMovimentosSpan = $('.moves');
+const restartButton = $('.restart');
+const sucessModal = $('#modal-sucess');
 
 let contadorDeMovimentos;
 
@@ -92,6 +93,14 @@ function verificarCartoesSelecionados(){
     fecharCartoesSelecionados()
     incrementarContadorDeMovimentos();
     habilitarCartoesNaoSelecionados();
+
+    atualizarPlacar();
+}
+
+function atualizarPlacar(){
+    if(cartoesNaoCombinados.length === 0){
+        exibirModalResultado();
+    }
 }
 
 /*
@@ -185,4 +194,11 @@ function reiniciarCartoes(){
     }
 
     cartoesNaoCombinados = cartoes;
+}
+
+function exibirModalResultado(){
+    sucessModal.modal({
+        close: reiniciarCartoes
+    });
+    $('.close-modal').on('click', reiniciarCartoes);
 }
