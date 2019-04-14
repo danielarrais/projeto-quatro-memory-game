@@ -25,6 +25,12 @@ function shuffle(array) {
     return array;
 }
 
+
+/*
+ * Embaralha os cards passados
+ *   - limpa o deck de cartas, embaralha as passadas e lança o novo arranjo
+ *   - adiciona o evento click com a função de revelar o card a todos eles
+ */
 function prepararCards(cards){
     let deck = $('.deck')
 
@@ -37,6 +43,10 @@ function prepararCards(cards){
     deck.append(cards)
 }
 
+/*
+ * Revela a figura clicada
+ *   - adiciona ou remove a class 'match' do elemento clicado
+ */
 function showCard(event){
     $(event.target).toggleClass('match');
 }
