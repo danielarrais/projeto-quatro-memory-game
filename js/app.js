@@ -147,10 +147,10 @@ function atualizarListasDeCartoes(){
 }
 
 function fecharCartoesAbertos(){
+    segundoCartaoSelecionado.toggleClass('match');
+    primeiroCartaoSelecionado.toggleClass('match');
     if(!compararCartoesSelecionados()){
         primeiroCartaoSelecionado = undefined;
         segundoCartaoSelecionado = undefined;
     }
-    segundoCartaoSelecionado.toggleClass('match');
-    primeiroCartaoSelecionado.toggleClass('match');
 }
