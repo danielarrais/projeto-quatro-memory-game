@@ -30,9 +30,15 @@ function prepararCards(cards){
 
     shuffle(cards);
 
+    deck.on('click', 'li', showCard)
+
     deck.empty();
 
     deck.append(cards)
+}
+
+function showCard(event){
+    $(event.target).toggleClass('match');
 }
 
 /*
