@@ -8,11 +8,23 @@ let cartoesCombinados;
 const contadorDeMovimentosSpan = $('.moves');
 const restartButton = $('.restart');
 const sucessModal = $('#modal-sucess');
+const timerSpan = $('.timer');
 
 let contadorDeMovimentos;
 
 let primeiroCartaoSelecionado;
 let segundoCartaoSelecionado;
+
+// declaring second and minute
+let second = {
+	value: 0,
+	label: " segs"
+};
+
+let minute = {
+	value: 0,
+	label: " mins "
+};
 
 iniciarJogo();
 
@@ -64,6 +76,7 @@ function embaralharJogo(){
  */
 function revelarCartao(event){
     if(!temDoisCartoesSelecionados()){
+        iniciarRelogio();
         cartaoClicado = $(event.target);
 
         if(!cartaoClicado.hasClass('open')){
@@ -226,4 +239,28 @@ function esquecerCartoesSelecionados(){
         segundoCartaoSelecionado.removeClass('open')
         segundoCartaoSelecionado = undefined;
     }
+}
+
+// refresh timer in HTML
+function atualizarRelogio() {
+	timerSpan.text(minute.value + minute.label + second.value + second.label);
+}
+
+// reset timer
+function zerarRelogio() {
+	second.value = 0;
+	minute.value = 0;
+	atualizarRelogio();
+}
+
+// start timer
+function iniciarRelogio() {
+		interval = setInterval(function() {
+			second.value++;
+			if(second.value == 60) {
+				minute.value++;
+				second.value = 0;
+			}
+			atualizarRelogio();
+		}, 1000);
 }

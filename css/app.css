@@ -40,7 +40,7 @@ h1 {
 
 .deck {
     min-height: 680px;
-    grid-column: span 8 !important;
+    grid-column: span 6 !important;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
@@ -99,7 +99,7 @@ header{
     margin: 0;
     padding: 0;
     display: inline-block;
-    margin: 0 5px 0 0;
+    margin: 0 10px 0 0;
 }
 
 .score-panel .stars li {
@@ -127,7 +127,11 @@ header{
 }
 
 .lateral {
-    grid-column: span 2 !important;
+    grid-column: span 3 !important;
+}
+
+.timer{
+    margin-right: 10px;
 }
 
 @keyframes pulse {
@@ -163,7 +167,7 @@ header{
         grid-column: span 12 !important;
     }
     .deck .card {
-        grid-column: span 4;
+        grid-column: span 4 !important;
     }
     .lateral {
         grid-column: span 0 !important;
@@ -176,7 +180,7 @@ header{
         grid-column: span 12 !important;
     }
     .deck .card {
-        grid-column: span 3;
+        grid-column: span 3 !important;
     }
     .lateral {
         grid-column: span 0 !important;
