@@ -102,8 +102,22 @@ function atualizarPlacar(){
         exibirModalResultado();
     }
 
-    if(contadorDeMovimentos > 0){
-        
+    if(contadorDeMovimentos >= 10){
+        alterarDesempenho(2)
+    }
+
+    if(contadorDeMovimentos >= 15){
+        alterarDesempenho(1)
+    }
+}
+
+function alterarDesempenho(des){
+    const starGroups = $('.stars');
+    if(des > 0 && des <= 3){
+        for(starGroup of starGroups){
+            const childs = starGroup.children;
+            $($(childs[des]).children()[0]).removeClass('fa-star').addClass('fa-star-o');
+        }
     }
 }
 
@@ -204,8 +218,12 @@ function exibirModalResultado(){
 }
 
 function esquecerCartoesSelecionados(){
-    primeiroCartaoSelecionado.removeClass('open')
-    primeiroCartaoSelecionado = undefined;
-    segundoCartaoSelecionado.removeClass('open')
-    segundoCartaoSelecionado = undefined;
+    if(primeiroCartaoSelecionado !== undefined){
+        primeiroCartaoSelecionado.removeClass('open')
+        primeiroCartaoSelecionado = undefined;
+    }
+    if(segundoCartaoSelecionado !== undefined){
+        segundoCartaoSelecionado.removeClass('open')
+        segundoCartaoSelecionado = undefined;
+    }
 }
