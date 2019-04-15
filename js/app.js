@@ -1,21 +1,29 @@
-/*
- * Create a list that holds all of your cartoes
- */
+// Atributo para armazenar os a lista de cartões não combinados
 let cartoesNaoCombinados;
 
+// Atributo para armazenar os a lista de cartões combinados
 let cartoesCombinados;
 
+// Atributo para armazenar o componente de exibição dos movimentos
 const contadorDeMovimentosSpan = $('.moves');
+
+// Atributo para armazenar o componente de reinicialização do jogo
 const restartButton = $('.restart');
+
+// Atributo para armazenar o componente de exibição dos resultados
 const sucessModal = $('#modal-sucess');
+
+// Atributo para armazenar o componente de exibição dos tempo de jogo
 const timerSpan = $('.timer');
 
+// Atributos para armazenar a quantidade de movimentos realizados
 let contadorDeMovimentos;
 
+// atributos para armazenar os dois cartões selecionados
 let primeiroCartaoSelecionado;
 let segundoCartaoSelecionado;
 
-// declaring second and minute
+// atributos para manipulção do tempo jogado
 let second = {
 	value: 0,
 	label: " segs"
@@ -28,7 +36,9 @@ let minute = {
 
 iniciarJogo();
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/**
+ * Método embaralha array
+*/
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -43,15 +53,19 @@ function shuffle(array) {
     return array;
 }
 
+/**
+ * Método utilizado para iniciar o jogo
+*/
 function iniciarJogo(){
     reiniciarCartoes();
+    zerarRelogio();
     iniciarContadorDeMovimentos();
     embaralharJogo();
 
     restartButton.on('click', iniciarJogo)
 }
 
-/*
+/**
  * Embaralha os cartoes passados
  *   - limpa o deck de cartas, embaralha as passadas e lança o novo arranjo
  *   - adiciona o evento click com a função de revelar o cartao a todos eles
@@ -70,9 +84,10 @@ function embaralharJogo(){
     }
 }
 
-/*
+/**
  * Revela a figura clicada
  *   - adiciona ou remove a class 'match' do elemento clicado
+ *   - agenda a execução do método verificarCartoesSelecionados()
  */
 function revelarCartao(event){
     if(!temDoisCartoesSelecionados()){
@@ -99,6 +114,9 @@ function revelarCartao(event){
     }
 }
 
+/**
+ * Método que executa as ações necessárias quando há dois cartões selecionados
+*/
 function verificarCartoesSelecionados(){
     if(compararCartoesSelecionados()){
         atualizarListasDeCartoes();
@@ -110,6 +128,11 @@ function verificarCartoesSelecionados(){
     atualizarPlacar()
 }
 
+/**
+ * Atualiza o placar e verifica se o jogo concluiu
+ * de acordo com a quantidade de cartões não 
+ * combinados e com a quantidade de movimentos
+*/
 function atualizarPlacar(){
     if(cartoesNaoCombinados.length === 0){
         exibirModalResultado();
@@ -124,6 +147,10 @@ function atualizarPlacar(){
     }
 }
 
+/**
+ * Altera o desempenho do jogador reduzindo a
+ * quantidade de estrela de acordo com o valor solicitado
+*/
 function alterarDesempenho(des){
     const starGroups = $('.stars');
     if(des > 0 && des <= 3){
@@ -134,7 +161,7 @@ function alterarDesempenho(des){
     }
 }
 
-/*
+/**
  * Compara os dois cartao selecionados
 */
 function compararCartoesSelecionados(){
@@ -145,7 +172,7 @@ function compararCartoesSelecionados(){
     return false;
 }
 
-/*
+/**
  * Incrementa contagem de movimentos
 */
 function incrementarContadorDeMovimentos(){
@@ -155,7 +182,7 @@ function incrementarContadorDeMovimentos(){
     }
 }
 
-/*
+/**
  * Incrementa contagem de movimentos
 */
 function iniciarContadorDeMovimentos(){
@@ -191,6 +218,9 @@ function habilitarCartoesNaoSelecionados(){
     }
 }
 
+/**
+ * Verifica se há dois cartões selecionados
+ */
 function temDoisCartoesSelecionados(){
     if(primeiroCartaoSelecionado !== undefined && segundoCartaoSelecionado !== undefined){
         return true;
@@ -198,11 +228,18 @@ function temDoisCartoesSelecionados(){
     return false;
 }
 
+/**
+ * Atualiza as duas listas de cartões utilizadas para saber
+ * os cartões abertos e os que faltam ser abertos
+ */
 function atualizarListasDeCartoes(){
     cartoesNaoCombinados = $('.card').not('.match')
     cartoesCombinados = $('.card.match')
 }
 
+/**
+ * Fecha os dois cartões abertos, caso eles não sejam iguais
+ */
 function fecharCartoesSelecionados(){
     if(!compararCartoesSelecionados()){
         segundoCartaoSelecionado.removeClass('match');
@@ -211,6 +248,9 @@ function fecharCartoesSelecionados(){
     esquecerCartoesSelecionados();
 }
 
+/**
+ * Reseta todos os cartões para o estado inicial
+ */
 function reiniciarCartoes(){
     cartoes = $('.card');
 
@@ -223,6 +263,9 @@ function reiniciarCartoes(){
     cartoesNaoCombinados = cartoes;
 }
 
+/**
+ * Abre a modal com o resultado do jogo
+ */
 function exibirModalResultado(){
     sucessModal.modal({
         close: reiniciarCartoes
@@ -230,6 +273,9 @@ function exibirModalResultado(){
     $('.close-modal').on('click', reiniciarCartoes);
 }
 
+/**
+ * Reseta os atributos que guardam os cartões selecionados pelo usuário
+ */
 function esquecerCartoesSelecionados(){
     if(primeiroCartaoSelecionado !== undefined){
         primeiroCartaoSelecionado.removeClass('open')
@@ -241,26 +287,32 @@ function esquecerCartoesSelecionados(){
     }
 }
 
-// refresh timer in HTML
+/**
+ * Atualiza o relógio da página
+ */
 function atualizarRelogio() {
-	timerSpan.text(minute.value + minute.label + second.value + second.label);
+    timerSpan.text(minute.value + minute.label + second.value + second.label);
 }
 
-// reset timer
+/**
+ * Zera o relógio
+ */
 function zerarRelogio() {
-	second.value = 0;
-	minute.value = 0;
-	atualizarRelogio();
+    second.value = 0;
+    minute.value = 0;
+    atualizarRelogio();
 }
 
-// start timer
+/**
+ * Inicializa o relogio
+ */
 function iniciarRelogio() {
-		interval = setInterval(function() {
-			second.value++;
-			if(second.value == 60) {
-				minute.value++;
-				second.value = 0;
-			}
-			atualizarRelogio();
-		}, 1000);
+        interval = setInterval(function() {
+            second.value++;
+            if(second.value == 60) {
+                minute.value++;
+                second.value = 0;
+            }
+            atualizarRelogio();
+        }, 1000);
 }
