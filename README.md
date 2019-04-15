@@ -1,20 +1,35 @@
-# Memory Game Project
 
-## Table of Contents
+# Jogo da Memória
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+## O que é
+É um jogo simples de cartas, usado para testar a memória dos jogadores. Este jogo foi criado como projeto de conclusão do [**Programa Nanodegree Fundamentos Web Front-End**](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) da **[Udacity](udacity.com)**
 
-## Instructions
+## Como jogar
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+ 1. Para iniciar o jogo basta clicar em uma carta. 
+ 2. O objetivo é encontrar todos os pares de carta e para isso basta abrir duas cartas e ver se elas são iguais. Caso as duas não sejam o sistema as fechará e caso sejam continuaram abertas e você deverá tentar encontrar o próximo par.
+ 3. Você poderá tentar novamente até que consiga encontrar todos os pares.
 
-To get started, open `js/app.js` and start building out the app's functionality
+## Desafio
+Encontrar todos os pares de cartões com o uso da menor quantidade  de movimentos que você conseguir.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+> **Dica:** use bem sua memória!
 
-## Contributing
+## Pontuação
+* 1 estrela por encontrar todos os pares;
+* 2 estrelas por encontrar todos os pares com até 10 movimentos.
+* 3 estrelas por encontrar todos os pares com até 15 movimentos.
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
+## Como construí o jogo
+* Utilizei [**HTML**](https://github.com/danielarrais/projeto-quatro-memory-game/blob/master/index.html), [**CSS**](https://github.com/danielarrais/projeto-quatro-memory-game/blob/master/css/app.css) e para estruturar o tabuleiro com as cartas;
+* E  utilizei a [**biblioteca jQuery**](https://jquery.com) para desenvolver toda a lógica do jogo e manipulação dos componentes HTML. Toda a programação pode ser encontrada no arquivo [**app.js**](https://github.com/danielarrais/projeto-quatro-memory-game/blob/master/js/app.js).
+* Criei um deck de 8 pares de cartas (16 cartas) que é embaralhado sempre que a página é carregada ou o botão reiniciar é clicado;
+* Adicionei um contador de movimentos para tornar o jogo mais desafiante;
+* Adicionei um temporizador para saber a duração do jogo;
+* Adicionei uma animação de pulse ao abrir a carta utilizando CSS3;
+* Criei uma janela pop-up utilizando o plugin  [**jQuery Modal**](https://jquerymodal.com/) que é exibida ao vencer, parabenizando o jogador. 
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Créditos
+
+O conteúdo estático deste projeto foi disponibilizado pela **[Udacity](udacity.com)** para todos os alunos do [**Programa Nanodegree Fundamentos Web Front-End**](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) no seu **[repositório](https://github.com/udacity/fend-project-memory-game)**. 
