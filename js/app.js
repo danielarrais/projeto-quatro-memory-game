@@ -23,6 +23,9 @@ let contadorDeMovimentos;
 let primeiroCartaoSelecionado;
 let segundoCartaoSelecionado;
 
+// atributo para armazenar a referência do interval
+let interval;
+
 // atributos para manipulção do tempo jogado
 let second = {
 	value: 0,
@@ -90,10 +93,11 @@ function embaralharJogo(){
  *   - agenda a execução do método verificarCartoesSelecionados()
  */
 function revelarCartao(event){
-    if(!temDoisCartoesSelecionados()){
+    cartaoClicado = $(event.target);
+    if(interval === undefined){
         iniciarRelogio();
-        cartaoClicado = $(event.target);
-
+    }
+    if(!temDoisCartoesSelecionados() && !cartaoClicado.hasClass('match') && cartaoClicado.hasClass('card')){
         if(!cartaoClicado.hasClass('open')){
             cartaoClicado.toggleClass('open')
         }
@@ -270,7 +274,8 @@ function exibirModalResultado(){
     sucessModal.modal({
         close: reiniciarCartoes
     });
-    $('.close-modal').on('click', reiniciarCartoes);
+    clearInterval(interval)
+    $('.close-modal').on('click', iniciarJogo);
 }
 
 /**
